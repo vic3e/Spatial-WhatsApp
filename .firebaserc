@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "test": "vast-test-8dbd1",
+    "default": "vast-test-8dbd1",
+    "beta": "vastverse-db828"
+  }
+}
