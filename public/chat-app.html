@@ -47,7 +47,7 @@
                     <div class="row no-gutters">
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
                             <div class="users-container">
-                                <div class="chat-search-box">
+                                <!-- <div class="chat-search-box">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="Search">
                                         <div class="input-group-btn">
@@ -56,7 +56,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <ul class="users">
                                     <li class="person" data-chat="person1">
                                         <div class="user">
@@ -122,9 +122,9 @@
                             </div>
                         </div>
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
-                            <div class="selected-user">
+                            <!-- <div class="selected-user">
                                 <span>To: <span class="name">Emily Russell</span></span>
-                            </div>
+                            </div> -->
                             <div class="chat-container">
                                 <ul class="chat-box chatContainerScroll">
                                     <li class="chat-left">
@@ -591,6 +591,61 @@ ul {
 
 <script type="text/javascript">
 
+functions = firebase.functions();
+auth = firebase.auth();
+if(window.location.hostname === "localhost"){
+  functions.useEmulator('localhost',5001);
+  auth.useEmulator("http://localhost:9099");
+  firebase.auth().signInWithCredential(firebase.auth.GoogleAuthProvider.credential(
+    '{"sub": "1234", "email": "gg@example.com", "email_verified": true , "name":"domdom"}'));
+}
+
+$( document ).ready(()=>{
+
+    auth.onAuthStateChanged(function(user) {
+    if (user) {
+    // User is signed in.
+    user.getIdToken(true).then(function(idToken) {
+        // get user list in the firestore
+        functions.httpsCallable('getUserList')({idToken})
+        .then(results=>{
+        $('.users').html('');
+        for(result in results.data){
+            console.log(results.data[result]);
+            $('.users').append(`<li class="person" data-uid="${results.data[result].uid}">
+                                        <div class="user">
+                                            <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin">
+                                            <span class="status"></span>
+                                        </div>
+                                        <p class="name-time">
+                                            <span class="name">${results.data[result].displayName}</span>
+                                            <span class="time">15/02/2019</span>
+                                        </p>
+                                    </li>`);
+        }
+        }).then(()=>{
+            $('.person').each(function(){
+                var params = new URLSearchParams(window.location.search)
+                var highLightUid = params.get('uid');
+                if ($(this).data('uid') === highLightUid){
+                    console.log('find high light user')
+                    $(this).addClass('active-user');
+                }
+            })
+            
+        });
+    
+    }).catch(function(error) {    
+    // Handle error
+    });
+    } 
+    else {
+        // user logout
+        console.log('user log out')
+        //location.href = '/';
+    }
+    });
+});
 </script>
 </body>
 </html>

@@ -72,7 +72,6 @@ img.profile-photo-lg{
 <script type="text/javascript">
 
 
-// firebase.auth().currentUser;
 functions = firebase.functions();
 auth = firebase.auth();
 if(window.location.hostname === "localhost"){
@@ -80,8 +79,6 @@ if(window.location.hostname === "localhost"){
   auth.useEmulator("http://localhost:9099");
   firebase.auth().signInWithCredential(firebase.auth.GoogleAuthProvider.credential(
     '{"sub": "1234", "email": "gg@example.com", "email_verified": true , "name":"domdom"}'));
-
-  console.log('emulation mode');
 }
 
 $( document ).ready(()=>{
@@ -123,13 +120,12 @@ $( document ).ready(()=>{
     }).catch(function(error) {    
     // Handle error
     });
-  } else {
-    // user logout
-    console.log('user log out')
-    //location.href = '/';
-  }
-});
-
+    } else {
+      // user logout
+      console.log('user log out')
+      //location.href = '/';
+    }
+  });
 });
 
 </script>

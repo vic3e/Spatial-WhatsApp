@@ -31,7 +31,7 @@ exports.getUserList = functions.https.onRequest((request, response) => {
               // doc.data() is never undefined for query doc snapshots
               console.log(doc.id, " => ", doc.data());
               if(doc.id !== uid){
-                data.push(Object.assign(doc.data(),{uid}))
+                data.push(Object.assign(doc.data(),{uid:doc.id}))
               }
           });
 
