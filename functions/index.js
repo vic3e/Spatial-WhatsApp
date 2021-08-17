@@ -15,6 +15,25 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
   })
 });
 
+exports.updateMessagingToken = functions.https.onRequest((request, response) => {
+  cors(request, response, () => {
+    db.collection('users').doc(request.body.data.uid).update({
+      messagingToken:request.body.data.messagingToken
+    });
+    response.send({result:'OK'});
+   
+  })
+});
+
+exports.sendMessage = functions.https.onRequest((request, response) => {
+  cors(request, response, () => {
+    //todo
+    
+    response.send({result:'OK'});
+   
+  })
+});
+
 exports.getUserList = functions.https.onRequest((request, response) => {
   cors(request, response, () => {
     const idToken = request.body.data.idToken;
