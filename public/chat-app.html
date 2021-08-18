@@ -513,8 +513,10 @@
         functions = firebase.functions();
         auth = firebase.auth();
         messaging = firebase.messaging();
+        var myMessagingToke = '';
+        var targetMessagingToken = '';
 
-        //test only
+        //test only, it can be call on browser console and send test message to anyone
         function sendTestMessage(token) {
             var key = 'AAAA8Kk47dU:APA91bH1rlr6m_22DqMAiUg6HuIEi_1Kr1uzXgky5Ti3aQPKO2tbJoboBqBx8Iguprf1x3GXYoZNsE4vdMt-9eY3aEQhrkjkZq79045xorYZLMzuek0uRU6YVGTwXhz3dokAlljtVoZD'
             var to = '';
@@ -541,40 +543,23 @@
         }
 
         //send message to friend
-        //the implementation is not save
-        //key should not leave in the frontend
         function sendMessage(token, message) {
-            var key = 'AAAA8Kk47dU:APA91bH1rlr6m_22DqMAiUg6HuIEi_1Kr1uzXgky5Ti3aQPKO2tbJoboBqBx8Iguprf1x3GXYoZNsE4vdMt-9eY3aEQhrkjkZq79045xorYZLMzuek0uRU6YVGTwXhz3dokAlljtVoZD'
-            var to = '';
-            var to = token;
             var notification = {
-                'data': { displayName: auth.currentUser.displayName, message }
+                displayName: auth.currentUser.displayName, message
             };
 
-            fetch('https://fcm.googleapis.com/fcm/send', {
-                'method': 'POST',
-                'headers': {
-                    'Authorization': 'key=' + key,
-                    'Content-Type': 'application/json'
-                },
-                'body': JSON.stringify({
-                    'notification': notification,
-                    'to': to
+            functions.httpsCallable('sendMessage')({ targetToken: token, messageObj: notification })
+                .then(results => {
+                    console.log(results)
                 })
-            }).then(function (response) {
-                console.log(response);
-            }).catch(function (error) {
-                console.error(error);
-            })
+
         }
 
-
-
-
+        //message recieve callback 
         messaging.onMessage((payload) => {
             console.log('Message received. ');
             console.log(payload)
-            var data = JSON.parse(payload.data['gcm.notification.data'])
+            var data = payload.data;
             // Update the UI to include the received message.
             var htmlString = `<li class="chat-left">
                                         <div class="chat-avatar">
@@ -587,7 +572,8 @@
             $('.chat-box').append(htmlString)
         });
 
-
+        //firebase emulator config 
+        // if you don't want to use emulators to debug, comment this part 
         if (window.location.hostname === "localhost") {
             functions.useEmulator('localhost', 5001);
             auth.useEmulator("http://localhost:9099");
@@ -595,8 +581,7 @@
                 '{"sub": "1234", "email": "gg@example.com", "email_verified": true , "name":"domdom"}'));
         }
 
-        var myMessagingToke = '';
-        var targetMessagingToken = '';
+
         $(document).ready(() => {
 
             //prevent enter key submit

@@ -12,18 +12,28 @@
  * limitations under the License.
  */
 
-var config = {
-  apiKey: "AIzaSyAazFKaMxplmV5HDF0J7ItcHOXcQT7f72w",
-  authDomain: "vast-test-8dbd1.firebaseapp.com",
-  databaseURL: "https://vast-test-8dbd1-default-rtdb.firebaseio.com",
-  projectId: "vast-test-8dbd1",
-  storageBucket: "vast-test-8dbd1.appspot.com",
-  messagingSenderId: "1033631231445",
-  appId: "1:1033631231445:web:cf54df0a7b7f9bf056615c",
-  measurementId: "G-ZPRV5X07KW"
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
+const config = {
+
+  apiKey: "AIzaSyBokF0e9DxsFN0nKBxIxPZ3wobKf_QkFgE",
+
+  authDomain: "vastverse-db828.firebaseapp.com",
+
+  databaseURL: "https://vastverse-db828-default-rtdb.firebaseio.com",
+
+  projectId: "vastverse-db828",
+
+  storageBucket: "vastverse-db828.appspot.com",
+
+  messagingSenderId: "218012039485",
+
+  appId: "1:218012039485:web:b8795841ba5bcf6d36ad54",
+
+  measurementId: "G-LEWRHN3K40"
 
 };
+
 firebase.initializeApp(config);
 console.log('firebase init')
 
